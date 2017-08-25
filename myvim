@@ -1,0 +1,120 @@
+#!/bin/bash
+
+# Make vim easier on Sean's eyes
+# Sean Wingert August 25, 2017
+
+# read-menu: a menu driven system information program
+
+# read-validate: validate input
+get_input () {
+while :
+ do 
+		clear
+		cat <<- EOF
+			Please Select:
+
+			  1. Install
+			  2. Uninstall 
+			  3. See .vimrc
+			  4. Quit
+
+		EOF
+		read -n1 -p "Enter selection [1-4] : "
+
+		case "$REPLY" in
+			"1") do_install ;;
+			"2") do_uninstall ;;
+			"3") [[ -s ~/.vimrc ]] && vim ~/.vimrc || printf "\n\n" && read -p " NOTE: ~/.vimrc does not exist or is empty." ;;
+			"4") echo ; echo ; exit ;;
+		esac
+  done
+}
+
+do_uninstall() {
+  #set -x
+	printf "\n\n"
+  echo "Remove pathogen"
+  rm -v ~/.vim/autoload/pathogen.vim		
+	
+  echo "Remove ~/.vimrc additions using sed"
+  sed -i '/MYVIM_START/,/MYVIM_END/d' ~/.vimrc
+
+  echo "Remove mydiff"
+  rm -v ~/.vim/colors/mydiff.vim
+
+	echo "Remove solarized"
+	rm -rv ~/.vim/bundle/vim-colors-solarized
+
+	echo
+  read -p "Done"
+
+  set +x
+}
+
+do_install () {
+	echo
+  set -x
+
+	# input is empty (invalid)
+	[[ -z $REPLY ]] && invalid_input
+
+	# input is multiple items (invalid)
+	(( $(echo $REPLY | wc -w) > 1 )) && invalid_input
+
+	# create paths
+	mkdir -p ~/.vim/autoload ~/.vim/bundle 
+
+	# download pathogen (manages vim runtimepath for plugins)
+  [[ -d ~/.vim/autoload/pathogen.vim ]] && echo "Pathogen already installed" || curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
+
+	# download solarized colorscheme
+	[[ -d ~/.vim/bundle/vim-colors-solarized ]] && echo "vim-colors-solarized is already installed" || git clone https://github.com/altercation/vim-colors-solarized ~/.vim/bundle/vim-colors-solarized
+
+	cat <<- EOF >> ~/.vimrc
+		VIMCOLORS_START
+		" enable pathogen
+		execute pathogen#infect()
+		
+		" minimum defaults
+		syntax on
+		filetype plugin indent on
+		
+		" if running in diff mode (e.g., vimdiff) 
+		if &diff
+				colorscheme mydiff
+				windo set wrap
+		endif
+		
+		" Solarized config
+		if &diff
+				colorscheme mydiff
+				windo set wrap
+		else
+				colorscheme solarized
+				" if using solarized palettes for Putty (.reg files), comment the rest out
+				let g:solarized_termcolors= 256
+				let g:solarized_termtrans = 0
+				let g:solarized_degrade = 0
+				let g:solarized_bold = 1
+				let g:solarized_underline = 1
+				let g:solarized_italic = 1
+				let g:solarized_contrast = "normal"
+				let g:solarized_visibility= "normal"
+				set background=dark
+				"hi Normal guibg=NONE ctermbg=NONE
+		endif
+		VIMCOLORS_END
+	EOF
+
+	# sensible colors for diffs
+	cat <<- EOF >> ~/.vim/colors/mydiff.vim
+		highlight DiffAdd    cterm=bold ctermfg=none ctermbg=250 gui=none guifg=bg guibg=Red
+		highlight DiffDelete cterm=bold ctermfg=251 ctermbg=255 gui=none guifg=bg guibg=Red
+		highlight DiffChange cterm=bold ctermfg=none ctermbg=250 gui=none guifg=bg guibg=Red
+		highlight DiffText   cterm=bold ctermfg=16 ctermbg=51 gui=none guifg=bg guibg=Red
+	EOF
+
+  set +x
+}
+
+get_input
