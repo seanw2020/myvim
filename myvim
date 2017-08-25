@@ -45,16 +45,16 @@ while :
 do_uninstall() {
   #set -x
 	printf "\n\n"
-  echo "Remove pathogen"
-  rm -iv ~/.vim/autoload/pathogen.vim
+	echo "Remove pathogen"
+	rm -iv ~/.vim/autoload/pathogen.vim
 	echo
 
-  echo "Remove ~/.vimrc additions using sed"
-  sed -i '/" MYVIM_START/,/" MYVIM_END/d' ~/.vimrc
+	echo "Remove ~/.vimrc additions using sed"
+	sed -i '/" MYVIM_START/,/" MYVIM_END/d' ~/.vimrc
 	echo
 
-  echo "Remove mydiff"
-  rm -iv ~/.vim/colors/mydiff.vim
+	echo "Remove mydiff"
+	rm -iv ~/.vim/colors/mydiff.vim
 	echo
 
 	echo "Remove solarized: " ~/.vim/bundle/vim-colors-solarized
@@ -63,6 +63,10 @@ do_uninstall() {
 
 	echo "Remove vim-json: " ~/.vim/bundle/vim-json
 	rm -rIv ~/.vim/bundle/vim-json
+	echo
+
+	echo "Remove vim-log4j: " ~/.vim/bundle/vim-log4j
+	rm -rIv ~/.vim/bundle/vim-log4j
 	echo
 
   read -p "Done"
@@ -80,6 +84,12 @@ do_install () {
 
 	# download solarized colorscheme
 	[[ -d ~/.vim/bundle/vim-colors-solarized ]] && echo "vim-colors-solarized is already installed" || git clone https://github.com/altercation/vim-colors-solarized ~/.vim/bundle/vim-colors-solarized
+
+	# install vim-json
+	[[ -d ~/.vim/bundle/vim-json ]] && echo "vim-json is already installed" || git clone https://github.com/elzr/vim-json ~/.vim/bundle/vim-json
+
+	# install vim-log4j
+	[[ -d ~/.vim/bundle/vim-log4j ]] && echo "vim-log4j is already installed" || git clone https://github.com/tetsuo13/vim-log4j ~/.vim/bundle/vim-log4j
 
 	# leave function if already exists
 	if grep -q '" MYVIM_START' ~/.vimrc
@@ -147,13 +157,6 @@ do_install () {
 		highlight DiffChange cterm=bold ctermfg=none ctermbg=250 gui=none guifg=bg guibg=Red
 		highlight DiffText   cterm=bold ctermfg=16 ctermbg=51 gui=none guifg=bg guibg=Red
 	EOF
-
-	# install vim-json
-	git clone https://github.com/elzr/vim-json ~/.vim/bundle/vim-json
-
-	# install vim-log4j
-	git clone https://github.com/tetsuo13/vim-log4j ~/.vim/bundle/vim-log4j
-
 
 	echo
 	read -p "Done installing"
