@@ -11,16 +11,17 @@ while :
  do 
 		clear
 		cat <<- EOF
-				myvim
+				Sean's myvim
 				------
 			Please Select:
 
-			  1. Install
-			  2. Uninstall 
-			  3. Edit .vimrc
-			  4. Enable putty-colors-solarized
-			  5. Disable putty-colors-solarized
-			  6. Quit
+			  1. Install plugins (vim-colors-solarized, vim-json, vim-log4j)
+			  2. Uninstall plugins 
+			  3. List installed bundles
+			  4. Edit .vimrc
+			  5. Enable putty-colors-solarized
+			  6. Disable putty-colors-solarized
+			  7. Quit
 			
 				Colors still not working? Either:
 				  1. Download putty-colors-solarized (double-click a dark or light .reg and reload Putty)
@@ -32,10 +33,11 @@ while :
 		case "$REPLY" in
 			"1") do_install ;;
 			"2") do_uninstall ;;
-			"3") [[ -s ~/.vimrc ]] && vim ~/.vimrc || printf "\n\n" && printf " NOTE: ~/.vimrc does not exist or is empty." && sleep 1.5 ;;
-			"4") palette="true" && do_uninstall && do_install ;;
-			"5") unset palette && do_uninstall && do_install ;;
-			"6") echo ; echo ; exit ;;
+			"3") echo ; echo ; ls -lha ~/.vim/bundle ; echo ; read -p "End of listing" ;;
+			"4") [[ -s ~/.vimrc ]] && vim ~/.vimrc || printf "\n\n" && printf " NOTE: ~/.vimrc does not exist or is empty." && sleep 1.5 ;;
+			"5") palette="true" && do_uninstall && do_install ;;
+			"6") unset palette && do_uninstall && do_install ;;
+			"7") echo ; echo ; exit ;;
 		esac
   done
 }
@@ -59,9 +61,16 @@ do_uninstall() {
 	rm -rIv ~/.vim/bundle/vim-colors-solarized
 	echo
 
-  read -p "Done"
+	echo "Remove vim-json: " ~/.vim/bundle/vim-json
+	rm -rIv ~/.vim/bundle/vim-json
+	echo
 
-  set +x
+  echo "Remove vim-log4j: " ~/.vim/bundle/vim-log4
+	rm -rIv ~/.vim/bundle/vim-json
+  echo
+
+  echo
+  read -p "Done"
 }
 
 do_install () {
@@ -143,6 +152,13 @@ do_install () {
 		highlight DiffChange cterm=bold ctermfg=none ctermbg=250 gui=none guifg=bg guibg=Red
 		highlight DiffText   cterm=bold ctermfg=16 ctermbg=51 gui=none guifg=bg guibg=Red
 	EOF
+
+	# install vim-json
+	git clone https://github.com/elzr/vim-json ~/.vim/bundle/vim-json
+
+	# install vim-log4j
+	git clone https://github.com/tetsuo13/vim-log4j ~/.vim/bundle/vim-log4j
+
 
 	echo
 	read -p "Done installing"
