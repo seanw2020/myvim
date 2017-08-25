@@ -11,14 +11,20 @@ while :
  do 
 		clear
 		cat <<- EOF
+				myvim
+				------
 			Please Select:
 
 			  1. Install
 			  2. Uninstall 
 			  3. Edit .vimrc
-			  4. Enable Putty Solarized session
-			  5. Disable Putty Solarized session
+			  4. Enable putty-colors-solarized
+			  5. Disable putty-colors-solarized
 			  6. Quit
+			
+				Colors still not working? Either:
+				  1. Download putty-colors-solarized (double-click a dark or light .reg and reload Putty)
+				  2. Putty > Settings > Connection > Data > Terminal-type string: xterm-256color
 
 		EOF
 		read -n1 -p "Enter selection [1-6] : "
