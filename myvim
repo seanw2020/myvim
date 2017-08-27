@@ -15,7 +15,7 @@ while :
 				------
 			Please Select:
 
-			  1. Install plugins (vim-colors-solarized, vim-json, vim-log4j)
+			  1. Install plugins (vim-colors-solarized, vim-json, vim-log-syntax)
 			  2. Uninstall plugins 
 			  3. List installed bundles
 			  4. Edit .vimrc
@@ -46,7 +46,7 @@ do_uninstall() {
   #set -x
 	printf "\n\n"
 	echo "Remove pathogen"
-	rm -iv ~/.vim/autoload/pathogen.vim
+	rm -fv ~/.vim/autoload/pathogen.vim
 	echo
 
 	echo "Remove ~/.vimrc additions using sed"
@@ -54,19 +54,19 @@ do_uninstall() {
 	echo
 
 	echo "Remove mydiff"
-	rm -iv ~/.vim/colors/mydiff.vim
+	rm -fv ~/.vim/colors/mydiff.vim
 	echo
 
 	echo "Remove solarized: " ~/.vim/bundle/vim-colors-solarized
-	rm -rIv ~/.vim/bundle/vim-colors-solarized
+	rm -rfv ~/.vim/bundle/vim-colors-solarized
 	echo
 
 	echo "Remove vim-json: " ~/.vim/bundle/vim-json
-	rm -rIv ~/.vim/bundle/vim-json
+	rm -rfv ~/.vim/bundle/vim-json
 	echo
 
-	echo "Remove vim-log4j: " ~/.vim/bundle/vim-log4j
-	rm -rIv ~/.vim/bundle/vim-log4j
+	echo "Remove vim-log-syntax: " ~/.vim/bundle/vim-log-syntax
+	rm -rfv ~/.vim/bundle/vim-log4j
 	echo
 
   read -p "Done"
@@ -89,7 +89,7 @@ do_install () {
 	[[ -d ~/.vim/bundle/vim-json ]] && echo "vim-json is already installed" || git clone https://github.com/elzr/vim-json ~/.vim/bundle/vim-json
 
 	# install vim-log4j
-	[[ -d ~/.vim/bundle/vim-log4j ]] && echo "vim-log4j is already installed" || git clone https://github.com/tetsuo13/vim-log4j ~/.vim/bundle/vim-log4j
+	[[ -d ~/.vim/bundle/vim-log-syntax ]] && echo "vim-log-syntax is already installed" || git clone https://github.com/dzeban/vim-log-syntax ~/.vim/bundle/vim-log-syntax
 
 	# leave function if already exists
 	if grep -q '" MYVIM_START' ~/.vimrc
