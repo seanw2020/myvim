@@ -38,6 +38,8 @@ while :
 			"5") palette="true" && do_uninstall && do_install ;;
 			"6") unset palette && do_uninstall && do_install ;;
 			"7") echo ; echo ; exit ;;
+			"q") echo ; echo ; exit ;;
+
 		esac
   done
 }
@@ -54,18 +56,18 @@ do_uninstall() {
 	echo
 
 	echo "Remove mydiff"
-	rm -fv ~/.vim/colors/mydiff.vim
+	rm -fv ~/.vim/bundle/mydiff
 	echo
 
-	echo "Remove solarized: " ~/.vim/bundle/vim-colors-solarized
+	echo "Remove solarized: " ~/.vim/bundle/vim-colors-solarized-master
 	rm -rfv ~/.vim/bundle/vim-colors-solarized
 	echo
 
-	echo "Remove vim-json: " ~/.vim/bundle/vim-json
+	echo "Remove vim-json: " ~/.vim/bundle/vim-json-master
 	rm -rfv ~/.vim/bundle/vim-json
 	echo
 
-	echo "Remove vim-log-syntax: " ~/.vim/bundle/vim-log-syntax
+	echo "Remove vim-log-syntax: " ~/.vim/bundle/vim-log-syntax-master
 	rm -rfv ~/.vim/bundle/vim-log4j
 	echo
 
@@ -91,6 +93,9 @@ do_install () {
 
 	# install vim-log4j
 	[[ -d ~/.vim/bundle/vim-log-syntax ]] && echo "vim-log-syntax is already installed" || curl -L https://github.com/dzeban/vim-log-syntax/archive/master.zip -o $F && unzip -o $F -d ~/.vim/bundle/ && \rm -f $F
+
+	# create mydiff
+	mkdir -p ~/.vim/bundle/mydiff/colors
 
 	# leave function if already exists
 	if grep -q '" MYVIM_START' ~/.vimrc
@@ -152,7 +157,7 @@ do_install () {
 		EOF
 
 	# install sensible colors for diffs
-	cat <<- EOF >> ~/.vim/colors/mydiff.vim
+	cat <<- EOF >> ~/.vim/bundle/mydiff/colors/mydiff.vim
 		highlight DiffAdd    cterm=bold ctermfg=none ctermbg=250 gui=none guifg=bg guibg=Red
 		highlight DiffDelete cterm=bold ctermfg=251 ctermbg=255 gui=none guifg=bg guibg=Red
 		highlight DiffChange cterm=bold ctermfg=none ctermbg=250 gui=none guifg=bg guibg=Red
