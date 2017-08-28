@@ -83,13 +83,14 @@ do_install () {
   [[ -d ~/.vim/autoload/pathogen.vim ]] && echo "Pathogen already installed" || curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
 
 	# download solarized colorscheme
-	[[ -d ~/.vim/bundle/vim-colors-solarized ]] && echo "vim-colors-solarized is already installed" || git clone https://github.com/altercation/vim-colors-solarized ~/.vim/bundle/vim-colors-solarized
+	[[ -d ~/.vim/bundle/vim-colors-solarized ]] && echo "vim-colors-solarized is already installed" || F=$(mktemp) && F=$(mktemp) && curl -L https://github.com/altercation/vim-colors-solarized/archive/master.zip -o $F && unzip -o $F -d ~/.vim/bundle/ && \rm -f $F
+
 
 	# install vim-json
-	[[ -d ~/.vim/bundle/vim-json ]] && echo "vim-json is already installed" || git clone https://github.com/elzr/vim-json ~/.vim/bundle/vim-json
+	[[ -d ~/.vim/bundle/vim-json ]] && echo "vim-json is already installed" || curl -L https://github.com/elzr/vim-json/archive/master.zip -o $F && unzip -o $F -d ~/.vim/bundle/ && \rm -f $F
 
 	# install vim-log4j
-	[[ -d ~/.vim/bundle/vim-log-syntax ]] && echo "vim-log-syntax is already installed" || git clone https://github.com/dzeban/vim-log-syntax ~/.vim/bundle/vim-log-syntax
+	[[ -d ~/.vim/bundle/vim-log-syntax ]] && echo "vim-log-syntax is already installed" || curl -L https://github.com/dzeban/vim-log-syntax/archive/master.zip -o $F && unzip -o $F -d ~/.vim/bundle/ && \rm -f $F
 
 	# leave function if already exists
 	if grep -q '" MYVIM_START' ~/.vimrc
